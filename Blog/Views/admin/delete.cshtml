@@ -1,0 +1,199 @@
+﻿@model Blog.Models.Create
+@{
+    ViewBag.Title = "delete";
+    Layout = "~/Views/Shared/_PartialLayout.cshtml";
+}
+
+
+
+<link href="~/Content/Select2.css" rel="stylesheet" />
+
+<div class="appmt-form location-col mt-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="title">Title</label>
+                                    <input type="text" class="form-control" id="title" value="@Model.title" disabled/>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="catagory">Catagory</label>
+                                    <select id="catagory" class="form-control" disabled>
+                                        @{
+                                            var getlist = ViewBag.Catagories as IEnumerable<Blog.Models.AddCategory>;
+
+                                            foreach (var item in getlist)
+                                            {   //using foreach
+
+                                                if (item.isSelect == true)
+                                                {
+                                                    <option value="@item.catid" selected> @item.catname </option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.catid"> @item.catname </option>
+                                                }
+
+
+
+
+
+                                            }
+
+
+                                            @*@foreach (var item in ViewBag.Catagories)
+                                                {
+                                                    <option> @item.catname </option>
+                                                }*@
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="catagory">Image</label>
+                                    @*<input type="file" id="file" name="file" />*@
+                                    <input type="file" id="file" name="file" value="@Model.bFileName" style="margin-left:14px;" disabled />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="author">Author</label>
+                                    <input type="text" class="form-control" id="author" value="@Model.author" disabled />
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="tag">Tag</label>
+                                    <select id="tag" class="form-control selecttags" multiple disabled>
+                                        @{
+                                            var taglists = ViewBag.Tagss as IEnumerable<Blog.Models.Addtag>;
+                                            foreach (var items in taglists)
+                                            {
+                                                if (items.isSelected == true)
+                                                {
+                                                    <option value="@items.tagid" selected> @items.tagname </option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@items.tagid"> @items.tagname </option>
+                                                }
+
+                                            }
+                                        }
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="metatitle">Meta Title</label>
+                                    <input type="text" class="form-control" value="@Model.metatitle" id="metatitle" disabled/>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="metadescription">Meta Description</label>
+                                    <input type="text" class="form-control" id="metadescription" value="@Model.metadescription" disabled/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="imgalternative">Img Alternative</label>
+                                    <input type="text" class="form-control" id="imgalternative" value="@Model.imagealt" disabled />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12">
+                                <div class="form-group">
+                                    <label for="description">Description</label>
+                                    <input type="text" class="form-control" id="description" value="@Model.blogdescription" disabled/>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-lg-12">
+                                <div class="form-group">
+                                    <input type="hidden" value="@Model.blogid" id="bid" />
+                                    <a class="btn btn-success" id="deleteblog">Delete</a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/jquery.min.js"></script>
+<script src="~/Scripts/Select2.js"></script>
+<script>
+        $('#tag').select2({
+            placeholder: "Select a Tags",
+            allowClear: true,
+            tags: true,
+            createTag: function () {
+                return null;
+            }
+        });
+    </script>
+<script>
+    $('#deleteblog').click(function (e) {
+        var ids = $("#bid").val();
+        var id = parseInt(ids);
+
+        debugger;
+        $.ajax({
+            type: "POST",
+            url: "/admin/deleteblog/" + id,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.success == true) {
+                 
+                    alert(result.responseText);
+                    window.location.href = "/admin";
+
+                }
+            }
+        })
+        //$.ajax({
+
+        //    url: "/blogs/addblog",
+        //    data: JSON.stringify(blgdata),
+        //    type: "POST",
+        //    contentType: "application/json;charset=utf-8",
+        //    dataType: "json",
+        //    success: function (result) {
+        //        debugger;
+        //        if (result.success == true) {
+        //            $("#title").val(" ");
+        //            $("#catagory").val(" ");
+        //            $("#author").val(" ");
+        //            $("#metatitle").val(" ");
+        //            $("#metadescription").val(" ");
+        //            $("#imgalternative").val(" ");
+        //            $("#description").val(" ");
+        //            alert(result.responseText);
+
+        //        }
+        //    }
+
+        //});
+    });
+</script>
+

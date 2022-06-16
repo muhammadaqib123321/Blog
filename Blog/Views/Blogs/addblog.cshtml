@@ -1,0 +1,257 @@
+﻿@{
+    ViewBag.Title = "addblog";
+    Layout = "~/Views/Shared/_PartialLayout.cshtml";
+}
+<link href="~/Content/Select2.css" rel="stylesheet" />
+
+
+<div class="appmt-form location-col mt-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-3">
+                                <div class="form-group">
+                                    <label for="title">Title</label>
+                                    <input type="text" class="form-control" id="title" />
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="form-group">
+                                    <label for="catagory">Catagory</label>
+                                    <select id="catagory" class="form-control">
+                                        @{
+                                            var getlist = ViewBag.Catagories as IEnumerable<Blog.Models.AddCategory>;
+
+                                            foreach (var item in getlist)
+                                            {   //using foreach
+                                                <option value="@item.catid"> @item.catname </option>
+                                            }
+
+
+                                            @*@foreach (var item in ViewBag.Catagories)
+                        {
+                            <option> @item.catname </option>
+                        }*@
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="form-group">
+                                    <label for="catagory">Image</label>
+                                    @*<input type="file" id="file" name="file" />*@
+                                    <input type="file" id="file" name="file" style="margin-left:14px;" />
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="form-group">
+                                    <label for="catagory">Publisher Image</label>
+                                    @*<input type="file" id="file" name="file" />*@
+                                    <input type="file" id="pfile" name="pfile" style="margin-left:14px;" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="author">Author</label>
+                                    <input type="text" class="form-control" id="author" />
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="tag">Tag</label>
+                                    <select id="tag" class="form-control selecttags" multiple>
+                                        @{
+                                            var taglists = ViewBag.Tagss as IEnumerable<Blog.Models.Addtag>;
+                                            foreach (var items in taglists)
+                                            {
+                                                <option value="@items.tagid"> @items.tagname </option>
+                                            }
+                                        }
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="metatitle">Meta Title</label>
+                                    <input type="text" class="form-control" id="metatitle" />
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="metadescription">Meta Description</label>
+                                    <input type="text" class="form-control" id="metadescription" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="imgalternative">Img Alternative</label>
+                                    <input type="text" class="form-control" id="imgalternative" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12">
+                                <div class="form-group">
+                                    <label for="description">Description</label>
+                                    <input type="text" class="form-control" id="description" />
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-lg-12">
+                                <div class="form-group">
+                                    <a class="btn btn-success" id="addblog">Add</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/jquery.min.js"></script>
+<script src="~/Scripts/Select2.js"></script>
+<script>
+    $('#addblog').click(function (e) {
+        var res = validation();
+        if (!res) {
+            return false;
+        }
+        var title = $("#title").val();
+        var author = $("#author").val();
+        var metadescription = $("#metadescription").val();
+        var metatitle = $("#metatitle").val();
+        var imgalternative = $("#imgalternative").val();
+        var description = $("#description").val();
+        var catagory = $("#catagory").val();
+        debugger;
+        var tag = $("#tag").val();
+
+        var file = $("#file").get(0).files;
+        var pfile = $("#pfile").get(0).files;
+        var data = new FormData;
+        data.append("ImageFile", file[0]);
+        data.append("pImageFile", pfile[0]);
+        data.append("title", title);
+        data.append("author", author);
+        data.append("metadescription", metadescription);
+        data.append("metatitle", metatitle);
+        data.append("imagealt", imgalternative);
+        data.append("blogdescription", description);
+        data.append("catid", parseInt(catagory));
+        debugger;
+
+        data.append("tagss", JSON.stringify(tag));
+
+
+        $.ajax({
+            type: "POST",
+            url: "/blogs/addblog",
+            data: data,
+            contentType: false,
+            processData: false,
+            success: function (result) {
+                if (result.success == true) {
+                    $("#title").val(" ");
+                    $("#catagory").val(" ");
+                    $("#author").val(" ");
+                    $("#metatitle").val(" ");
+                    $("#metadescription").val(" ");
+                    $("#imgalternative").val(" ");
+                    $("#description").val(" ");
+                    alert(result.responseText);
+                    window.location.href = "/Blogs";
+
+                }
+            }
+        })
+        //$.ajax({
+
+        //    url: "/blogs/addblog",
+        //    data: JSON.stringify(blgdata),
+        //    type: "POST",
+        //    contentType: "application/json;charset=utf-8",
+        //    dataType: "json",
+        //    success: function (result) {
+        //        debugger;
+        //        if (result.success == true) {
+        //            $("#title").val(" ");
+        //            $("#catagory").val(" ");
+        //            $("#author").val(" ");
+        //            $("#metatitle").val(" ");
+        //            $("#metadescription").val(" ");
+        //            $("#imgalternative").val(" ");
+        //            $("#description").val(" ");
+        //            alert(result.responseText);
+
+        //        }
+        //    }
+
+        //});
+    });
+    function validation() {
+        var isValid = true;
+        if ($("#title").val().trim() == "") {
+            alert("Required");
+            isValid = false;
+        }
+        else if ($("#catagory").val().trim() == "") {
+            alert("Required");
+            isValid = false;
+        }
+        else if ($("#file").val().trim() == "") {
+            alert("Required");
+            isValid = false;
+        }
+        else if ($("#pfile").val().trim() == "") {
+            alert("Required");
+            isValid = false;
+        }
+        else if ($("#author").val().trim() == "") {
+            alert("Required");
+            isValid = false;
+        }
+        else if ($("#metatitle").val().trim() == "") {
+            alert("Required");
+            isValid = false;
+        }
+        else if ($("#metadescription").val().trim() == "") {
+            alert("Required");
+            isValid = false;
+        }
+        else if ($("#imgalternative").val().trim() == "") {
+            alert("Required");
+            isValid = false;
+        }
+        else if ($("#description").val().trim() == "") {
+            alert("Required");
+            isValid = false;
+        }
+        return isValid;
+    }
+    $('#tag').select2({
+        placeholder: "Select a Tags",
+        allowClear: true,
+        tags: true,
+        createTag: function () {
+            return null;
+        }
+    });
+</script>
+
+
+
+
+
+
+

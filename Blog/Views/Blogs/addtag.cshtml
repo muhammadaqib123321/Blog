@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewBag.Title = "addtag";
+    Layout = "~/Views/Shared/_PartialLayout.cshtml";
+}
+
+<div class="appmt-form location-col mt-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="tag" />
+                                    <a class="btn btn-success" id="addtag">Add</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/jquery.min.js"></script>
+<script>
+    $('#addtag').click(function (e) {
+        var res = validation();
+        if (!res) {
+            return false;
+        }
+        var tagname = $("#tag").val();
+
+        var dataa = {
+            "tagname": tagname
+        }
+        debugger;
+        $.ajax({
+
+            url: "/blogs/addtag",
+            data: JSON.stringify(dataa),
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                debugger;
+                if (result.success == true) {
+                    $("#tag").val(" ");
+                    alert(result.responseText);
+
+                }
+            }
+
+        });
+    });
+
+    function validation() {
+        var isValid = true;
+        if ($("#tag").val().trim() == "") {
+            alert("Required");
+            isValid = false;
+        }
+        return isValid;
+    }
+</script>
+
+

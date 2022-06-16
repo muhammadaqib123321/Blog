@@ -1,0 +1,176 @@
+﻿
+@model  PagedList.IPagedList<Blog.Models.Create>
+@using PagedList.Mvc;
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Index";
+}
+<style>
+
+    .pagination {
+        justify-content: center;
+    }
+
+        .pagination > li:first-child > a, .pagination > li:first-child > span {
+            margin-left: 5px;
+            border-radius: 4px;
+            padding: 6px 34px;
+            margin-right: 5px;
+        }
+
+        .pagination > .active > a {
+            color: #ffffff !important;
+            background-color: #1a2c79 !important;
+            border: 1px solid #1a2c79;
+            padding: 6px 34px;
+        }
+
+        .pagination li a {
+            color: #060606;
+            padding: 6px 12px;
+            background-color: #f7f7f7;
+            border-radius: 4px;
+            border: 1px solid black;
+            margin: 0px 5px;
+        }
+
+        .pagination > li:first-child > a, .pagination > li:first-child > span {
+            margin-left: 5px;
+            border-radius: 4px;
+            padding: 6px 34px;
+            margin-right: 5px;
+        }
+
+        .pagination > li:last-child > a, .pagination > li:last-child > span {
+            margin-left: 5px;
+            border-radius: 4px;
+            padding: 6px 34px;
+            margin-right: 5px;
+        }
+</style>
+
+<div class="breadcrumb-bar">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-md-12 col-12">
+                <nav aria-label="breadcrumb" class="page-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Blog</li>
+                    </ol>
+                </nav>
+                <h2 class="breadcrumb-title">Blog</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Breadcrumb -->
+<!-- Page Content -->
+<div class="content">
+    <div class="container">
+
+        <div class="row">
+            @foreach (var items in Model)
+            {
+                <div class="col-lg-4 col-md-12" style="margin-top:20px;">
+                    <!-- Blog Post -->
+                    <div class="blog h-100">
+                        <div class="blog-image" style=" width: 23rem; height: 20rem;">
+                            <a href="~/Blogs/blogdetails"><img class="img-fluid" src="@items.bFilePath" alt="@items.imagealt"></a>
+                        </div>
+                        <h3 class="blog-title"><a href="~/Blogs/blogdetails/@items.blogid">@items.title</a></h3>
+                        <div class="blog-info clearfix">
+                            <div class="post-left">
+                                <ul>
+                                    <li>
+                                        <div class="post-author">
+                                            <a><img src="@items.pFilePath" alt="Post Author"><span>@items.author</span></a>
+                                        </div>
+                                    </li>
+                                    <li><i class="far fa-clock"></i>@items.AddCategory.catname</li>
+
+                                    @foreach (var item in items.Maptags)
+                                    {
+                                        <li><i class="far fa-clock"></i>@item.Addtag.tagname</li>
+                                    }
+
+
+
+                                    @*<li><i class="far fa-comments"></i>12 Comments</li>
+                                    <li><i class="fa fa-tags"></i>Health Tips</li>*@
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="blog-content">
+                            <p style=" white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 300px;">
+                                @items.blogdescription
+                            </p>
+                            <a href="~/Blogs/blogdetails/@items.blogid" class="read-more">Read More</a>
+                        </div>
+                    </div>
+                    <!-- /Blog Post -->
+
+                </div>
+            }
+
+        </div>
+        <div class="row justify-content-center" style=" margin-top: 3rem; margin-bottom: 3rem;">
+
+            <center></center>
+
+            @Html.PagedListPager(Model, page => Url.Action("Index",
+               new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+            @*<nav class="mt-4">
+
+
+                <ul class="pagination">
+
+                    <li class="page-item PagedList-skipToPrevious">
+                        <a class="page-link border border-variant-soft rounded active" href="/blog?page=1" rel="prev">Previous</a>
+                    </li>
+                    <li class="page-item active">
+                        <a class="page-link border border-variant-soft rounded active" href="/blog?page=1">1</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link border border-variant-soft rounded active" href="#">2</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link border border-variant-soft rounded" href="#">3</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link border border-variant-soft rounded" href="#">Next</a>
+                    </li>
+                </ul>
+
+            </nav>*@
+
+        </div>
+        @*<div class="row">
+            <div class="col-md-12">
+                <div class="blog-pagination">
+                    <nav>
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1"><i class="fas fa-angle-double-left"></i></a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">3</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#"><i class="fas fa-angle-double-right"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>*@
+    </div>
+
+</div>

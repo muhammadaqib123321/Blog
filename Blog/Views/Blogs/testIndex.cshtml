@@ -1,0 +1,83 @@
+﻿@model IEnumerable<Blog.Models.Create>
+
+@{
+    ViewBag.Title = "testIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>testIndex</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<table class="table table-responsive">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AddCategory.catname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.author)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.metadescription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.metatitle)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.imagealt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.blogdescription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.bFilePath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.bFileName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.AddCategory.catname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.author)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.metadescription)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.metatitle)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.imagealt)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.blogdescription)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.bFilePath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.bFileName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.blogid }) |
+            @Html.ActionLink("Details", "Details", new { id=item.blogid }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.blogid })
+        </td>
+    </tr>
+}
+
+</table>

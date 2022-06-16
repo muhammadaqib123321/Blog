@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Blog.Models.Create>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_PartialLayout.cshtml";
+}
+
+
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.author)
+        </th>
+        <th>Options</th>
+    </tr>
+=@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.author)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.blogid }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.blogid })
+        </td>
+    </tr>
+}
+</table>
